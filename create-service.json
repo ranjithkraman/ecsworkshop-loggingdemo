@@ -1,0 +1,7 @@
+{
+    "taskDefinition": "arn:aws:ecs:us-west-2:832499941258:task-definition/firelens-example-cloudwatch:1",
+    "cluster": "ECS-Logging-Demo",
+    "desiredCount": 1,
+    "launchType": "EC2",
+    "schedulingStrategy": "REPLICA"
+}

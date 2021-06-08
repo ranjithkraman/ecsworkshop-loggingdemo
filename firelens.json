@@ -1,0 +1,41 @@
+{
+	"family": "firelens-example-cloudwatch",
+	"taskRoleArn": "arn:aws:iam::832499941258:role/ecsworkshop-logging-demo-TaskExecutionRole250D2532-N6BF8CCQRHGH",
+	"containerDefinitions": [
+		{
+			"essential": true,
+			"image": "906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:latest",
+			"name": "log_router",
+			"firelensConfiguration": {
+				"type": "fluentbit"
+			},
+			"logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "ecsworkshop-logging-demo-ECSLoggingDemoLogGrp5B141160-rEB1ERFqaA1s",
+					"awslogs-region": "us-west-2",
+					"awslogs-create-group": "true",
+					"awslogs-stream-prefix": "firelens"
+				}
+			},
+			"memoryReservation": 50
+		 },
+		 {
+			 "essential": true,
+			 "image": "nginx",
+			 "name": "app",
+			 "logConfiguration": {
+				 "logDriver":"awsfirelens",
+				 "options": {
+					"Name": "cloudwatch",
+					"region": "us-west-2",
+					"log_key": "log",
+                    "log_group_name": "/aws/ecs/containerinsights/$(ecs_cluster)/application",
+					"auto_create_group": "true",
+					"log_stream_prefix": "log_stream_name"
+				}
+			},
+			"memoryReservation": 100
+		}
+	]
+}

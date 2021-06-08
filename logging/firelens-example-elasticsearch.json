@@ -1,0 +1,49 @@
+{
+    "family": "firelens-example-elasticsearch",
+	"taskRoleArn": "arn:aws:iam::832499941258:role/ecs_task_iam_role",
+	"requiresCompatibilities": [ "FARGATE" ],
+    "containerDefinitions": [
+        {
+            "essential": true,
+            "image": "906394416424.dkr.ecr.us-west-2.amazonaws.com/aws-for-fluent-bit:latest",
+            "name": "log_router",
+            "firelensConfiguration": {
+                "type": "fluentbit"
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "firelens-container",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "firelens"
+                }
+            },
+            "memoryReservation": 50
+        },
+        {
+            "essential": true,
+            "image": "httpd",
+            "name": "app",
+            "logConfiguration": {
+                "logDriver": "awsfirelens",
+                "options": {
+                    "Name": "es",
+                    "Host": "search-ecsworkshop-logging-uqrrlo5ch3t4jmqstpumqewvje.us-west-2.es.amazonaws.com",
+                    "Port": "443",
+                    "AWS_Auth": "On",
+                    "AWS_Region": "us-west-2",
+                    "tls": "On"
+                }
+            },
+            "memoryReservation": 100
+        }
+    ],
+    "cpu": "256",
+    "executionRoleArn": "arn:aws:iam::832499941258:role/ecsworkshop-logging-demo-TaskExecutionRole250D2532-N6BF8CCQRHGH",
+    "memory": "512",
+    "volumes": [ ],
+    "placementConstraints": [ ],
+    "networkMode": "awsvpc",
+    "tags": [ ]
+}
